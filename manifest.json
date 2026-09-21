@@ -1,0 +1,10 @@
+{
+  "name":"KOOLTracK",
+  "short_name":"KOOLTracK",
+  "description":"Control de vehículos y trabajos de Koolaudio y Rekool.",
+  "start_url":"./",
+  "display":"standalone",
+  "background_color":"#080808",
+  "theme_color":"#ed1018",
+  "icons":[]
+}

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0a0a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="KOOLTracK">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+  <title>KOOLTracK</title>
+</head>
+<body>
+  <div id="app">
+
+    <!-- PANTALLA 1: SELECCIÓN DE TIENDA -->
+    <section id="storeScreen" class="screen store-screen">
+      <div class="store-bg"></div>
+      <div class="store-content">
+        <img class="main-logo" src="assets/logo-koolaudio.jpg" alt="Koolaudio">
+        <div class="brand-title"><span>KOOL</span><b>TracK</b></div>
+        <p class="tagline">CONTROL TOTAL DE TU TALLER</p>
+
+        <div class="store-heading">
+          <small>BIENVENIDO A</small>
+          <h1>Selecciona tu tienda</h1>
+          <p>Gestiona, registra y lleva el control de cada vehículo.</p>
+        </div>
+
+        <button class="store-card active" onclick="selectStore('Koolaudio')">
+          <img src="assets/logo-koolaudio.jpg" alt="Koolaudio">
+          <span class="store-arrow">›</span>
+        </button>
+
+        <button class="store-card" onclick="selectStore('Rekool')">
+          <img src="assets/logo-rekool.jpg" alt="Rekool">
+          <span class="store-arrow">›</span>
+        </button>
+
+        <div class="store-footer">K - O - O - L &nbsp; A U D I O &nbsp; | &nbsp; R E K O O L</div>
+      </div>
+    </section>
+
+    <!-- PANTALLA 2: HOME -->
+    <section id="homeScreen" class="screen app-screen hidden">
+      <header class="app-header">
+        <button class="icon-button" onclick="showStore()">☰</button>
+        <div class="app-brand"><span>KOOL</span><b>TracK</b></div>
+        <div class="mini-koala">🐨</div>
+      </header>
+
+      <main class="content">
+        <div class="store-label">
+          <button onclick="showStore()"><span id="currentStore">Koolaudio</span>⌄</button>
+          <p>Bienvenido a tu centro de control.</p>
+        </div>
+
+        <section class="stats">
+          <div class="stat-card">
+            <span class="stat-icon">🚗</span>
+            <strong id="vehicleCount">0</strong>
+            <small>Vehículos</small>
+          </div>
+          <div class="stat-card">
+            <span class="stat-icon">🔧</span>
+            <strong id="processCount">0</strong>
+            <small>En proceso</small>
+          </div>
+          <div class="stat-card">
+            <span class="stat-icon">✓</span>
+            <strong id="deliveredCount">0</strong>
+            <small>Entregados</small>
+          </div>
+        </section>
+
+        <div class="search-row">
+          <div class="search-box">
+            <span>⌕</span>
+            <input id="searchInput" type="search" placeholder="Buscar vehículo, cliente o placa..." oninput="renderVehicles()">
+          </div>
+          <button class="filter-button" onclick="toggleFilters()">☷</button>
+        </div>
+
+        <div id="filters" class="filters hidden">
+          <button class="filter active" onclick="setFilter('Todos', this)">Todos</button>
+          <button class="filter" onclick="setFilter('En proceso', this)">En proceso</button>
+          <button class="filter" onclick="setFilter('En espera', this)">En espera</button>
+          <button class="filter" onclick="setFilter('Entregado', this)">Entregados</button>
+        </div>
+
+        <button class="add-button" onclick="openForm()">＋ Agregar vehículo</button>
+
+        <div class="quick-actions">
+          <button onclick="focusVehicles()">🚗<span>Vehículos</span></button>
+          <button onclick="openForm()">🔧<span>Trabajos</span></button>
+          <button onclick="alert('Módulo de clientes: próximamente')">👥<span>Clientes</span></button>
+          <button onclick="focusVehicles()">▤<span>Historial</span></button>
+        </div>
+
+        <div class="section-head">
+          <h2>Vehículos recientes</h2>
+          <button onclick="setFilter('Todos'); renderVehicles()">Ver todos ›</button>
+        </div>
+
+        <div id="vehicleList" class="vehicle-list"></div>
+      </main>
+
+      <nav class="bottom-nav">
+        <button class="selected">⌂<span>Inicio</span></button>
+        <button onclick="focusVehicles()">🚗<span>Vehículos</span></button>
+        <button onclick="openForm()">🔧<span>Trabajos</span></button>
+        <button onclick="alert('Módulo de clientes: próximamente')">👥<span>Clientes</span></button>
+        <button onclick="showStore()">•••<span>Más</span></button>
+      </nav>
+    </section>
+
+    <!-- FORMULARIO -->
+    <div id="formModal" class="modal hidden">
+      <div class="modal-card">
+        <div class="modal-head">
+          <div>
+            <small>NUEVO REGISTRO</small>
+            <h2>Agregar vehículo</h2>
+          </div>
+          <button onclick="closeForm()">×</button>
+        </div>
+
+        <div class="form-grid">
+          <label>Cliente<input id="client" placeholder="Nombre del cliente"></label>
+          <label>Teléfono<input id="phone" type="tel" placeholder="Número"></label>
+          <label>Marca<input id="brand" placeholder="Toyota"></label>
+          <label>Modelo<input id="model" placeholder="Tundra"></label>
+          <label>Año<input id="year" type="number" placeholder="2026"></label>
+          <label>Placa<input id="plate" placeholder="ABC-123"></label>
+          <label>Estado
+            <select id="status">
+              <option>En proceso</option>
+              <option>En espera</option>
+              <option>Entregado</option>
+            </select>
+          </label>
+          <label class="full">Trabajo<textarea id="job" placeholder="Describe el trabajo solicitado..."></textarea></label>
+        </div>
+
+        <button class="add-button" onclick="saveVehicle()">Guardar vehículo</button>
+      </div>
+    </div>
+
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
